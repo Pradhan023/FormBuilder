@@ -69,8 +69,8 @@ const GeneratedForm = () => {
       setText(clearedText);
       const obj = {Objdata:text}
       console.log(obj);
-      axios.post("http://localhost:5000/form/addadmindata",obj)
-      axios.delete("http://localhost:5000/form/deleteformdata")
+      axios.post("https://formbuilder-api.onrender.com/form/addadmindata",obj)
+      axios.delete("https://formbuilder-api.onrender.com/form/deleteformdata")
       Nav('/')
       // console.log(text);
     }
@@ -79,7 +79,7 @@ const GeneratedForm = () => {
   };
   useEffect(()=>{
     (async()=>{
-    const data = await axios.get("http://localhost:5000/form/getdata")
+    const data = await axios.get("https://formbuilder-api.onrender.com/form/getdata")
       console.log(data.data)
       setFormData(data.data)
     })()

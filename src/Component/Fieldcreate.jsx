@@ -124,7 +124,7 @@ const Fieldcreate = () => {
   // this function will generate the form and push to database and render the generated form 
   const generateForm = async () => {
     const data = await axios.post(
-      "http://localhost:5000/form/adddata",
+      "https://formbuilder-api.onrender.com/form/adddata",
       formData
     );
     Nav("/gereratedform");

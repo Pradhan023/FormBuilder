@@ -8,7 +8,7 @@ const Admin = () => {
   useEffect(() => {
     (async () => {
       const dataadmin = await axios.get(
-        "http://localhost:5000/form/getadmindata"
+        "https://formbuilder-api.onrender.com/form/getadmindata"
       );
       setData(dataadmin.data);
     })();
