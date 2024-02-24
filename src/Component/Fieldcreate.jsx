@@ -9,7 +9,7 @@ import {
 import React, { useState } from "react";
 import Taskcomp from "./Taskcomp";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const formData = [
   {
@@ -136,7 +136,7 @@ const Fieldcreate = () => {
         <h1 className="font-bold text-4xl text-cyan-700">Form Builder</h1>
         <p className=" text-red-800 font-bold">Build Your Custom Form</p>
       </div>
-
+      <NavLink to='/admin' className="text-xl font-bold text-white border-2 border-cyan-300 bg-cyan-600 px-2 " >Admin Panel </NavLink>
       {/* colm grid form and edit input */}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 py-14 bg-white rounded-xl">
