@@ -97,7 +97,7 @@ export default function SignUp() {
       //here we will check if any of the value is empty then dont display the loader
     }
     if (validate()) {
-        const res = await axios.post("http://localhost:5000/admin/adminregister",data)
+        const res = await axios.post("https://formbuilder-api.onrender.com/admin/adminregister",data)
         if(res.data.msg == "Already registered"){
             toast.warn("Admin with this email is already registered")
         }
