@@ -1,18 +1,40 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Admin = () => {
   // data from db will save here
   const [data, setData] = useState([]);
+  const token = localStorage.getItem("formtoken")
+  const[val,setVal]=useState()
+
+  const deleteItem = async(i)=>{
+    const id= i._id;
+    // console.log(data);
+    const data = await axios.post("https://formbuilder-api.onrender.com/form/admindeletefield",{id},
+    {
+      headers:{
+        Authorization:"Bearer " +token
+      }
+    })
+    setVal(data.data)
+  }
 
   useEffect(() => {
     (async () => {
       const dataadmin = await axios.get(
-        "https://formbuilder-api.onrender.com/form/getadmindata"
+        "https://formbuilder-api.onrender.com/form/getadmindata",
+        {
+          headers:{
+            Authorization:"Bearer " +token
+          }
+        }
       );
       setData(dataadmin.data);
     })();
-  }, []);
+  }, [val]);
+
+  
 
   return (
     <div className="bg-slate-200 h-screen px-12">
@@ -47,7 +69,7 @@ const Admin = () => {
                       );
                     })}
                   </div>
-                  <div className="flex border-2 bg-cyan-200 justify-evenly leading-loose text-lg capitalize">
+                  <div className="flex items-center border-2 bg-cyan-200 justify-evenly leading-loose text-lg capitalize">
                     {newData?.map((i, n) => {
                       console.log(i);
                       return (
@@ -56,6 +78,9 @@ const Admin = () => {
                         </div>
                       );
                     })}
+                     <span onClick={()=>deleteItem(i)}>
+                     <DeleteIcon/>
+                     </span>
                   </div>
                 </>
               );

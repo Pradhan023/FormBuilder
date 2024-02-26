@@ -3,7 +3,9 @@
 # You can create and customize your form and also can submit
 
 # submitted form and no. of created form you can see in admin panel 
-# To visit admin panel just you have to click on Admin button on top left it will take you to the admin panel.
+# To Generate the form you have to admin login first .
+# After login you will get the add delete form functionality.
+# To visit admin panel just you have to click on profile icon on top right corner it will take you to the admin panel.
 
 # You will be getting the default form field which is email,first name , last name , email .
 

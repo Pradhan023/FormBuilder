@@ -10,6 +10,8 @@ import React, { useState } from "react";
 import Taskcomp from "./Taskcomp";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 const formData = [
   {
@@ -31,6 +33,7 @@ const formData = [
 ];
 const Fieldcreate = () => {
   const Nav = useNavigate();
+  const token = localStorage.getItem("formtoken")
 
   // dropdown menu 
   const [fieldtext, setFieldtext] = useState({
@@ -123,11 +126,21 @@ const Fieldcreate = () => {
 
   // this function will generate the form and push to database and render the generated form 
   const generateForm = async () => {
-    const data = await axios.post(
-      "https://formbuilder-api.onrender.com/form/adddata",
-      formData
-    );
-    Nav("/gereratedform");
+    if(token){
+      await axios.post(
+        "https://formbuilder-api.onrender.com/form/adddata",
+        {Dataform:formData},
+        {
+          headers:{
+            Authorization:"Bearer " +token
+          }
+        }
+      );
+      Nav("/gereratedform");
+    }
+    else{
+      toast.warn("Admin need to Login")
+    }
   };
 
   return (
@@ -136,7 +149,6 @@ const Fieldcreate = () => {
         <h1 className="font-bold text-4xl text-cyan-700">Form Builder</h1>
         <p className=" text-red-800 font-bold">Build Your Custom Form</p>
       </div>
-      <NavLink to='/admin' className="text-xl font-bold text-white border-2 border-cyan-300 bg-cyan-600 px-2 " >Admin Panel </NavLink>
       {/* colm grid form and edit input */}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 py-14 bg-white rounded-xl">
@@ -257,6 +269,7 @@ const Fieldcreate = () => {
           </div>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

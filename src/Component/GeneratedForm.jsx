@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 const GeneratedForm = () => {
   const Nav = useNavigate()
+  const token = localStorage.getItem("formtoken")
   // const formData = [
   //   {
   //     type: "text",
@@ -69,8 +70,18 @@ const GeneratedForm = () => {
       setText(clearedText);
       const obj = {Objdata:text}
       console.log(obj);
-      axios.post("https://formbuilder-api.onrender.com/form/addadmindata",obj)
-      axios.delete("https://formbuilder-api.onrender.com/form/deleteformdata")
+      axios.post("https://formbuilder-api.onrender.com/form/addadmindata",obj,
+      {
+      headers:{
+        Authorization:"Bearer " +token
+      }
+    })
+      axios.delete("https://formbuilder-api.onrender.com/form/deleteformdata",
+      {
+      headers:{
+        Authorization:"Bearer " +token
+      }
+    })
       Nav('/')
       // console.log(text);
     }
@@ -79,9 +90,14 @@ const GeneratedForm = () => {
   };
   useEffect(()=>{
     (async()=>{
-    const data = await axios.get("https://formbuilder-api.onrender.com/form/getdata")
-      console.log(data.data)
-      setFormData(data.data)
+    const data = await axios.get("https://formbuilder-api.onrender.com/form/getdata",
+    {
+      headers:{
+        Authorization:"Bearer " +token
+      }
+    })
+      console.log(data.data[0].Dataform)
+      setFormData(data.data[0].Dataform)
     })()
   },[])
   console.log(formData);
@@ -98,7 +114,7 @@ const GeneratedForm = () => {
         {formData.map((i, n) => {
           return (
             <>
-              {i.type !== "checkbox" && i.type !== "select" && (
+              {i.type !== "checkbox" && i.type !== "select" && !i.dataId && (
                 <>
                   <FormControl fullWidth>
                     <TextField
