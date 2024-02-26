@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
+  CircularProgress,
   FormControl,
   FormHelperText,
   IconButton,
@@ -46,7 +47,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-    const Nav = useNavigate()
+  const Nav = useNavigate();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -80,7 +81,10 @@ export default function SignIn() {
     return valid;
   };
 
-  const handleSubmit = async(event) => {
+  // loader state
+  const [loader, setLoader] = useState(false);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const count = Object.values(data);
@@ -88,18 +92,23 @@ export default function SignIn() {
       //here we will check if any of the value is empty then dont display the loader
     }
     if (validate()) {
-        const res = await axios.post("https://formbuilder-api.onrender.com/admin/adminlogin",data)
-        localStorage.setItem("formtoken",res.data.accessToken);
-        localStorage.setItem("adminName",res.data.username);
-        if(res.data.msg == "logged In"){
-            toast.success("Admin Successfully Login")
-            setTimeout(()=>{
-                Nav("/")
-            },2000)
-        }
-        else{
-            toast.warn(res.data.msg)
-        }
+      setLoader(true);
+      const res = await axios.post(
+        "https://formbuilder-api.onrender.com/admin/adminlogin",
+        data
+      );
+      localStorage.setItem("formtoken", res.data.accessToken);
+      localStorage.setItem("adminName", res.data.username);
+      if (res.data.msg == "logged In") {
+        toast.success("Admin Successfully Login");
+        setTimeout(() => {
+          setLoader(false);
+          Nav("/");
+        }, 2000);
+      } else {
+        setLoader(false);
+        toast.warn(res.data.msg);
+      }
       setData({
         email: "",
         password: "",
@@ -193,11 +202,15 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              {!loader ? (
+                <span className="text-lg">Sign In</span>
+              ) : (
+                <CircularProgress color="inherit" />
+              )}
             </Button>
             <Grid container justifyContent="center">
               <Grid item className=" cursor-pointer">
-                <Link onClick={()=>Nav('/register')} variant="body2">
+                <Link onClick={() => Nav("/register")} variant="body2">
                   Dont have an account? Sign Up
                 </Link>
               </Grid>

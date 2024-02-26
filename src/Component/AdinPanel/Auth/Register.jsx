@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
+  CircularProgress,
   FormControl,
   FormHelperText,
   IconButton,
@@ -46,7 +47,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-    const Nav = useNavigate()
+  const Nav = useNavigate();
   const [data, setData] = useState({
     username: "",
     email: "",
@@ -89,7 +90,10 @@ export default function SignUp() {
     return valid;
   };
 
-  const handleSubmit = async(event) => {
+  // loader state
+  const [loader, setLoader] = useState(false);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const count = Object.values(data);
@@ -97,22 +101,27 @@ export default function SignUp() {
       //here we will check if any of the value is empty then dont display the loader
     }
     if (validate()) {
-        const res = await axios.post("https://formbuilder-api.onrender.com/admin/adminregister",data)
-        if(res.data.msg == "Already registered"){
-            toast.warn("Admin with this email is already registered")
-        }
-        else{
-            toast.success("Admin successfully registered")
-            setTimeout(()=>{
-                Nav("/login")
-            },2000)
-        }
+      setLoader(true);
+      const res = await axios.post(
+        "https://formbuilder-api.onrender.com/admin/adminregister",
+        data
+      );
+      if (res.data.msg == "Already registered") {
+        setLoader(false);
+        toast.warn("Admin with this email is already registered");
+      } else {
+        toast.success("Admin successfully registered");
+        setTimeout(() => {
+          setLoader(false);
+          Nav("/login");
+        }, 2000);
+      }
       setData({
         username: "",
         email: "",
         password: "",
       });
-    //   console.log(data);
+      //   console.log(data);
     }
   };
 
@@ -216,11 +225,15 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              {!loader ? (
+                <span className="text-lg">Sign Up</span>
+              ) : (
+                <CircularProgress color="inherit" />
+              )}
             </Button>
             <Grid container justifyContent="center">
               <Grid item className=" cursor-pointer">
-                <Link onClick={()=>Nav('/login')} variant="body2">
+                <Link onClick={() => Nav("/login")} variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
@@ -229,7 +242,7 @@ export default function SignUp() {
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-      <ToastContainer/>
+      <ToastContainer />
     </ThemeProvider>
   );
 }
