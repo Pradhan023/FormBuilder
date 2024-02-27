@@ -1,40 +1,50 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 
 const Admin = () => {
   // data from db will save here
   const [data, setData] = useState([]);
-  const token = localStorage.getItem("formtoken")
-  const[val,setVal]=useState()
+  const token = localStorage.getItem("formtoken");
+  const [val, setVal] = useState();
 
-  const deleteItem = async(i)=>{
-    const id= i._id;
+  const deleteItem = async (i) => {
+    const id = i._id;
     // console.log(data);
-    const data = await axios.post("https://formbuilder-api.onrender.com/form/admindeletefield",{id},
-    {
-      headers:{
-        Authorization:"Bearer " +token
+    const data = await axios.post(
+      "https://formbuilder-api.onrender.com/form/admindeletefield",
+      { id },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       }
-    })
-    setVal(data.data)
-  }
+    );
+    setVal(data.data);
+  };
 
   useEffect(() => {
     (async () => {
       const dataadmin = await axios.get(
         "https://formbuilder-api.onrender.com/form/getadmindata",
         {
-          headers:{
-            Authorization:"Bearer " +token
-          }
+          headers: {
+            Authorization: "Bearer " + token,
+          },
         }
       );
       setData(dataadmin.data);
     })();
   }, [val]);
-
-  
 
   return (
     <div className="bg-slate-200 h-screen px-12">
@@ -53,39 +63,43 @@ const Admin = () => {
             No Data ...
           </p>
         ) : (
-          <>
-            {data?.map((i) => {
-              const newData = Object.values(i.Objdata);
-              const keyobj = Object.keys(i.Objdata);
-              // console.log(newData);
-              return (
-                <>
-                  <div className="flex gap-10 pt-5 justify-evenly">
-                    {keyobj.map((i, n) => {
-                      return (
-                        <div key={n}>
-                          <p>{i}</p>
+          <TableContainer component={Paper}>
+            <Table>
+              {data?.map((i) => {
+                const newData = Object.values(i.Objdata); //getting the values of object
+                const keyobj = Object.keys(i.Objdata); //getting the keys of object
+                return (
+                  <>
+                    <TableHead>
+                      <TableRow>
+                        {keyobj.map((i, n) => {
+                          return <TableCell align="center">{i}</TableCell>;
+                        })}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <TableRow className="bg-gray-100">
+                        {newData?.map((i, n) => {
+                          console.log(i);
+                          return (
+                            <TableCell align="center">
+                              {i.slice(0, 15)}
+                            </TableCell>
+                          );
+                        })}
+                        <div
+                          className="wi-fit  flex items-center justify-center h-[3rem]"
+                          onClick={() => deleteItem(i)}
+                        >
+                          <DeleteIcon />
                         </div>
-                      );
-                    })}
-                  </div>
-                  <div className="flex items-center border-2 bg-cyan-200 justify-evenly leading-loose text-lg capitalize">
-                    {newData?.map((i, n) => {
-                      console.log(i);
-                      return (
-                        <div className="text-center" key={n}>
-                          <p className="w-[10rem]">{i.slice(0, 15)}</p>
-                        </div>
-                      );
-                    })}
-                     <span onClick={()=>deleteItem(i)}>
-                     <DeleteIcon/>
-                     </span>
-                  </div>
-                </>
-              );
-            })}
-          </>
+                      </TableRow>
+                    </TableBody>
+                  </>
+                );
+              })}
+            </Table>
+          </TableContainer>
         )}
       </div>
     </div>

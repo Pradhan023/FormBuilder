@@ -10,8 +10,8 @@ import React, { useState } from "react";
 import Taskcomp from "./Taskcomp";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const formData = [
   {
@@ -33,14 +33,14 @@ const formData = [
 ];
 const Fieldcreate = () => {
   const Nav = useNavigate();
-  const token = localStorage.getItem("formtoken")
+  const token = localStorage.getItem("formtoken");
 
-  // dropdown menu 
+  // dropdown menu
   const [fieldtext, setFieldtext] = useState({
     type: "",
   });
 
-  // text input 
+  // text input
   const [inputtext, setInputtext] = useState({
     type: "",
     label: "",
@@ -49,7 +49,7 @@ const Fieldcreate = () => {
   // checkbox
   const [checkbox, setCheckbox] = useState({
     type: "",
-    label: "",
+    checklabel: "",
     check1: "",
     check2: "",
   });
@@ -57,11 +57,11 @@ const Fieldcreate = () => {
   // select
   const [selectoption, setOption] = useState({
     type: "",
-    label: "",
+    selectlabel: "",
     options: [],
   });
 
-  // option data will save inside it 
+  // option data will save inside it
   const [optionstring, setOptionstring] = useState("");
 
   // type of dropdown menu
@@ -86,7 +86,6 @@ const Fieldcreate = () => {
   // function for to add input data in formData array
   const enterData = () => {
     if (typesave == "text") {
-
       // making the shallow copy to add type key
       const newObj = { ...inputtext, type: fieldtext.type };
       formData.push(newObj);
@@ -95,13 +94,12 @@ const Fieldcreate = () => {
         label: "",
       });
       setFieldtext({ type: "" });
-    } 
-    else if (typesave == "checkbox") {
+    } else if (typesave == "checkbox") {
       const newObj = { ...checkbox, type: fieldtext.type };
       formData.push(newObj);
       setCheckbox({
         type: "",
-        label: "",
+        checklabel: "",
         check1: "",
         check2: "",
       });
@@ -110,36 +108,34 @@ const Fieldcreate = () => {
       // this statement will check if option field is have value if yes then it will show the alert
       if (optionstring) {
         alert("Add Option");
-      } 
-      else {
+      } else {
         const newObj = { ...selectoption, type: fieldtext.type };
-        // console.log(newObj);
+        console.log(newObj);
         formData.push(newObj);
         setOption({
           type: "",
-          label: "",
+          selectlabel: "",
           options: [],
         });
       }
     }
   };
 
-  // this function will generate the form and push to database and render the generated form 
+  // this function will generate the form and push to database and render the generated form
   const generateForm = async () => {
-    if(token){
+    if (token) {
       await axios.post(
         "https://formbuilder-api.onrender.com/form/adddata",
-        {Dataform:formData},
+        { Dataform: formData },
         {
-          headers:{
-            Authorization:"Bearer " +token
-          }
+          headers: {
+            Authorization: "Bearer " + token,
+          },
         }
       );
       Nav("/gereratedform");
-    }
-    else{
-      toast.warn("Admin need to Login")
+    } else {
+      toast.warn("Admin need to Login");
     }
   };
 
@@ -151,7 +147,7 @@ const Fieldcreate = () => {
       </div>
       {/* colm grid form and edit input */}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 py-14 bg-white rounded-xl">
+      <div className="grid grid-cols-1 gap-8 grid-rows-2 lg:grid-rows-1 md:grid-rows-1 lg:grid-cols-2 md:grid-cols-2 py-8 lg:py-14 md:py-14 bg-white rounded-xl">
         {/* form colm */}
         <div className="flex flex-col gap-4 items-center">
           <h1 className="text-xl text-gray-500">Preview</h1>
@@ -162,9 +158,9 @@ const Fieldcreate = () => {
         </div>
 
         {/* edit input */}
-        <div className="">
+        <div className="flex flex-col items-center lg:items-start md:items-start">
           <h1 className="text-xl pb-3">Add field Input</h1>
-          <div className="flex flex-col gap-4 w-1/2">
+          <div className="flex flex-col gap-4 w-full px-8 lg:w-96 lg:px-0 md:px-0 md:pr-8 ">
             {/* label */}
             <FormControl>
               <InputLabel id="demo-simple-select-label">Select Type</InputLabel>
@@ -205,9 +201,9 @@ const Fieldcreate = () => {
                   id="outlined-basic"
                   label="Label Input"
                   name="checklabel"
-                  value={checkbox.label}
+                  value={checkbox.checklabel}
                   onChange={(e) =>
-                    setCheckbox({ ...checkbox, label: e.target.value })
+                    setCheckbox({ ...checkbox, checklabel: e.target.value })
                   }
                   variant="outlined"
                 />
@@ -239,9 +235,9 @@ const Fieldcreate = () => {
                   id="outlined-basic"
                   label="Label Input"
                   name="selectlabel"
-                  value={selectoption.label}
+                  value={selectoption.selectlabel}
                   onChange={(e) =>
-                    setOption({ ...selectoption, label: e.target.value })
+                    setOption({ ...selectoption, selectlabel: e.target.value })
                   }
                   variant="outlined"
                 />
@@ -269,7 +265,7 @@ const Fieldcreate = () => {
           </div>
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };

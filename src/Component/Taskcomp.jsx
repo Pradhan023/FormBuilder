@@ -28,7 +28,7 @@ const Taskcomp = ({ data, index }) => {
       )}
       {data.type == "checkbox" && (
         <div className="flex items-center gap-4">
-          <FormLabel component="legend">{data.label}</FormLabel>
+          <FormLabel component="legend">{data.checklabel}</FormLabel>
           <FormControlLabel
             control={<Checkbox name={data.check1} value={data.check1} />}
             label={data.check1}
@@ -42,11 +42,13 @@ const Taskcomp = ({ data, index }) => {
       {data.type == "select" && (
         <div>
           <FormControl sx={{ m: 1, minWidth: 250 }}>
-            <InputLabel id="demo-simple-select-label">{data.label}</InputLabel>
+            <InputLabel id="demo-simple-select-label">
+              {data.selectlabel}
+            </InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              label={data.label}
+              label={data.selectlabel}
               value={seVal}
             >
               {data.options.map((k) => {

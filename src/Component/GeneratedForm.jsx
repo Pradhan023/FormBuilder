@@ -96,24 +96,24 @@ const GeneratedForm = () => {
         Authorization:"Bearer " +token
       }
     })
-      console.log(data.data[0].Dataform)
-      setFormData(data.data[0].Dataform)
+      console.log(data.data[0]?.Dataform)
+      setFormData(data.data[0]?.Dataform)
     })()
   },[])
-  console.log(formData);
+  // console.log(formData);
   return (
     <div className="grid justify-center items-center py-10">
       <h1 className="text-center py-5 text-4xl w-[20rem] uppercase font-bold text-cyan-700">
         Form
       </h1>
       {
-        formData.length == 0 ?<p className="text-3xl font-bold text-gray-300 py-60">No Form Created ....</p>
+        formData?.length == undefined ?<p className="text-3xl font-bold text-gray-300 py-60">No Form Created ....</p>
         :
         <>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {formData.map((i, n) => {
+        {formData?.map((i, n) => {
           return (
-            <>
+            <div key={n}>
               {i.type !== "checkbox" && i.type !== "select" && !i.dataId && (
                 <>
                   <FormControl fullWidth>
@@ -136,11 +136,11 @@ const GeneratedForm = () => {
               {i.type == "checkbox" && (
                 <div className="flex items-center gap-4">
                   <FormLabel component="legend" error={errorval}>
-                    {i.label}
+                    {i.checklabel}
                   </FormLabel>
                   <FormControlLabel
                     helperText={errorval ? "All Field are mendatory" : ""}
-                    name={i.label}
+                    name={i.checklabel}
                     checked={checked}
                     onChange={(e) => {
                       setChecked(!checked);
@@ -150,7 +150,7 @@ const GeneratedForm = () => {
                     label={i.check1}
                   />
                   <FormControlLabel
-                    name={i.label}
+                    name={i.checklabel}
                     checked={checked1}
                     onChange={(e) => {
                       setChecked1(!checked1);
@@ -172,13 +172,13 @@ const GeneratedForm = () => {
                 <div>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
-                      {i.label}
+                      {i.selectlabel}
                     </InputLabel>
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      label={i.label}
-                      name={i.label}
+                      label={i.selectlabel}
+                      name={i.selectlabel}
                       onChange={(e) =>
                         setText({ ...text, [e.target.name]: e.target.value })
                       }
@@ -204,7 +204,7 @@ const GeneratedForm = () => {
                   </FormControl>
                 </div>
               )}
-            </>
+            </div>
           );
         })}
         <button className="border-2 bg-cyan-500 text-white">
